@@ -32,6 +32,14 @@ describe("chinese2Arabic", function () {
     expect(chinese2Arabic(input)).toBe(expected)
   })
 
+  it.each`
+    input | expected
+    ${"九千八百七十六兆五千四百三十二億九千八百七十六万五千四百三十二"} | ${"9876543298765432"}
+    ${"九千八百七十六兆五千四百三十二"} | ${"9876000000005432"}
+  `("with large numbers [$input -> $expected]", ({input, expected}) => {
+    expect(chinese2Arabic(input)).toBe(expected)
+  })
+
   describe("error cases", () => {
     it.each`
       input | expectedMessage

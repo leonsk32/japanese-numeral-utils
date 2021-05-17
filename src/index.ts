@@ -1,18 +1,44 @@
 export function chinese2Arabic(text: string) {
   const middleNumbers = Object.keys(middleNumbersMap)
+  const largeNumbers = Object.keys(largeNumbersMap)
   const matchResult = text.match(
-    new RegExp("[" + middleNumbers.join("") + "]")
+    new RegExp(`[${largeNumbers.join("")}${middleNumbers.join("")}]`)
   )
 
   if (!matchResult) {
     return getArabicNumbersFromSmallNumberOnlyText(text)
   }
 
-  return parseMiddleNumbers(middleNumbers, text).toString()
+  return parseLargeNumbers(largeNumbers, text).toString()
 }
 
 function getArabicNumbersFromSmallNumberOnlyText(text: string) {
   return text.split("").map(e => chinese2ArabicMap[e]).join("")
+}
+
+function parseLargeNumbers(largeNumbers: string[], text: string): number {
+  if (text === "") {
+    return 0
+  }
+
+  const largeNumbersRegex = new RegExp("[" + largeNumbers.join("") + "]")
+  const matchResult = text.match(largeNumbersRegex)
+  const middleNumbers = Object.keys(middleNumbersMap)
+
+  if (!matchResult) {
+    return parseMiddleNumbers(middleNumbers, text)
+  }
+
+  const matchedIndex = matchResult.index
+  const matchedLargeNumber = matchResult[0]
+
+  const factor = parseMiddleNumbers(middleNumbers, text.substring(0, matchedIndex))
+
+  return factor * largeNumbersMap[matchedLargeNumber]
+    + parseLargeNumbers(
+      largeNumbers.slice(largeNumbers.findIndex(n => n === matchedLargeNumber) + 1),
+      text.substring(matchedIndex! + 1)
+    )
 }
 
 function parseMiddleNumbers(middleNumbers: string[], text: string): number {
@@ -39,7 +65,7 @@ function parseMiddleNumbers(middleNumbers: string[], text: string): number {
   const matchedIndex = matchResult.index
   const matchedMiddleNumber = matchResult[0]
 
-  if (matchedIndex === undefined || matchedIndex > 1) {
+  if (matchedIndex! > 1) {
     throw TypeError(`unable to parse ${text}`)
   }
 
@@ -48,7 +74,7 @@ function parseMiddleNumbers(middleNumbers: string[], text: string): number {
   return factor * middleNumbersMap[matchedMiddleNumber]
     + parseMiddleNumbers(
       middleNumbers.slice(middleNumbers.findIndex(n => n === matchedMiddleNumber) + 1),
-      text.substring(matchedIndex + 1)
+      text.substring(matchedIndex! + 1)
     )
 }
 
@@ -69,5 +95,12 @@ const middleNumbersMap: Record<string, number> = {
   "千": 1000,
   "百": 100,
   "十": 10,
+}
+
+const largeNumbersMap: Record<string, number> = {
+  "京": Math.pow(10, 16),
+  "兆": Math.pow(10, 12),
+  "億": Math.pow(10, 8),
+  "万": Math.pow(10, 4),
 }
 
