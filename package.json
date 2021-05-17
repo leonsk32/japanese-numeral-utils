@@ -1,0 +1,36 @@
+{
+  "name": "chinese-to-arabic-numerals",
+  "version": "0.0.1",
+  "description": "Convert Chinese numerals to Arabic numerals",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest --testPathPattern=specs --runInBand"
+  },
+  "author": "leonsk32",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^26.0.23",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.5.6",
+    "typescript": "^4.2.4"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ],
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "tsconfig.json"
+      }
+    },
+    "testMatch": [
+      "**/specs/**/?(*.)+(spec|test).[jt]s?(x)"
+    ]
+  }
+}
