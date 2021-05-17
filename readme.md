@@ -2,6 +2,9 @@
 
 Utilities for handling Japanese numerals.
 
+[![Latest NPM release](https://img.shields.io/npm/v/@leonsk32/japanese-numeral-utils.svg)](https://www.npmjs.com/package/@leonsk32/japanese-numeral-utils)
+![MIT License](https://img.shields.io/npm/l/@leonsk32/japanese-numeral-utils.svg)
+
 ## Installation
 
 ```shell
