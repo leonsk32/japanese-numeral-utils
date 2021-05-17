@@ -32,22 +32,18 @@ function parseMiddleNumbers(middleNumbers: string[], text: string): number {
     if (value === undefined) {
       throw TypeError(`unable to parse ${text}`)
     }
-    
+
     return value
   }
 
   const matchedIndex = matchResult.index
   const matchedLargeNumber = matchResult[0]
 
-  let factor
-  if (matchedIndex == 0) {
-    factor = 1
-  } else if (matchedIndex == 1) {
-    const chineseFactor = text.split(matchedLargeNumber)[0]
-    factor = chinese2ArabicMap[chineseFactor]
-  } else {
+  if (matchedIndex === undefined || matchedIndex > 1) {
     throw TypeError(`unable to parse ${text}`)
   }
+
+  const factor = matchedIndex === 0 ? 1 : chinese2ArabicMap[(text.charAt(0))]
 
   return factor * middleNumbersMap[matchedLargeNumber]
     + parseMiddleNumbers(
