@@ -1,7 +1,7 @@
 {
-  "name": "chinese-to-arabic-numerals",
+  "name": "@leonsk32/japanese-numeral-utils",
   "version": "0.0.1",
-  "description": "Convert Chinese numerals to Arabic numerals",
+  "description": "Utilities for handling Japanese numerals.",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
