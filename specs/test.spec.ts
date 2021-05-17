@@ -31,4 +31,19 @@ describe("chinese2Arabic", function () {
   `("with large numbers [$input -> $expected]", ({input, expected}) => {
     expect(chinese2Arabic(input)).toBe(expected)
   })
+
+  it.each`
+    input | expectedMessage
+    ${"四五千"} | ${"unable to parse 四五千"}
+    ${"五千四三百"} | ${"unable to parse 四三百"}
+    ${"五千四百三二十"} | ${"unable to parse 三二十"}
+    ${"五千四百三十二一"} | ${"unable to parse 二一"}
+  `("unparsable [$input]", ({input, expectedMessage}) => {
+    try {
+      chinese2Arabic(input)
+      fail("should not reach here")
+    } catch (e) {
+      expect(e.message).toBe(expectedMessage)
+    }
+  })
 })

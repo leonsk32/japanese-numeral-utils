@@ -1,37 +1,38 @@
 export function chinese2Arabic(text: string) {
-  const largeNumbers = Object.keys(largeNumbersMap)
+  const middleNumbers = Object.keys(middleNumbersMap)
   const matchResult = text.match(
-    new RegExp("[" + largeNumbers.join("") + "]")
+    new RegExp("[" + middleNumbers.join("") + "]")
   )
 
   if (!matchResult) {
     return getArabicNumbersFromSmallNumberOnlyText(text)
   }
 
-  return f(largeNumbers, text).toString()
+  return parseMiddleNumbers(middleNumbers, text).toString()
 }
 
 function getArabicNumbersFromSmallNumberOnlyText(text: string) {
   return text.split("").map(e => chinese2ArabicMap[e]).join("")
 }
 
-function f(largeNumbers: string[], text: string): number {
+function parseMiddleNumbers(middleNumbers: string[], text: string): number {
   if (text === "") {
     return 0
   }
 
-  const largeNumbersRegex = new RegExp("[" + largeNumbers.join("") + "]")
-  const matchResult = text.match(largeNumbersRegex)
+  const middleNumbersRegex = new RegExp("[" + middleNumbers.join("") + "]")
+  const matchResult = text.match(middleNumbersRegex)
 
   if (!matchResult) {
     if (text.length !== 1) {
-      throw TypeError()
+      throw TypeError(`unable to parse ${text}`)
     }
 
     const value = chinese2ArabicMap[text]
     if (value === undefined) {
-      throw TypeError()
+      throw TypeError(`unable to parse ${text}`)
     }
+    
     return value
   }
 
@@ -45,12 +46,12 @@ function f(largeNumbers: string[], text: string): number {
     const chineseFactor = text.split(matchedLargeNumber)[0]
     factor = chinese2ArabicMap[chineseFactor]
   } else {
-    throw TypeError()
+    throw TypeError(`unable to parse ${text}`)
   }
 
-  return factor * largeNumbersMap[matchedLargeNumber]
-    + f(
-      largeNumbers.filter(value => value !== matchedLargeNumber),
+  return factor * middleNumbersMap[matchedLargeNumber]
+    + parseMiddleNumbers(
+      middleNumbers.filter(value => value !== matchedLargeNumber),
       text.substring(matchedIndex + 1)
     )
 }
@@ -68,7 +69,7 @@ const chinese2ArabicMap: Record<string, number> = {
   "九": 9,
 }
 
-const largeNumbersMap: Record<string, number> = {
+const middleNumbersMap: Record<string, number> = {
   "十": 10,
   "百": 100,
   "千": 1000,
