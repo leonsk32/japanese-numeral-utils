@@ -1,4 +1,4 @@
-import { chinese2Arabic } from "../src"
+import { kanji2Arabic } from "../src"
 
 describe("chinese2Arabic", function () {
   it.each`
@@ -14,11 +14,11 @@ describe("chinese2Arabic", function () {
     ${"八"} | ${"8"}
     ${"九"} | ${"9"}
   `("one digit [$input -> $expected]", ({input, expected}) => {
-    expect(chinese2Arabic(input)).toBe(expected)
+    expect(kanji2Arabic(input)).toBe(expected)
   })
 
   it("no middle numbers", () => {
-    expect(chinese2Arabic("一二三四五六七八九〇")).toBe("1234567890")
+    expect(kanji2Arabic("一二三四五六七八九〇")).toBe("1234567890")
   })
 
   it.each`
@@ -29,7 +29,7 @@ describe("chinese2Arabic", function () {
     ${"五千三十"} | ${"5030"}
     ${"五百一"} | ${"501"}
   `("with middle numbers [$input -> $expected]", ({input, expected}) => {
-    expect(chinese2Arabic(input)).toBe(expected)
+    expect(kanji2Arabic(input)).toBe(expected)
   })
 
   it.each`
@@ -39,7 +39,7 @@ describe("chinese2Arabic", function () {
     ${"九千京一"} | ${"90000000000000000001"}
     ${"九千極"} | ${"9000000000000000000000000000000000000000000000000000"}
   `("with large numbers [$input -> $expected]", ({input, expected}) => {
-    expect(chinese2Arabic(input)).toBe(expected)
+    expect(kanji2Arabic(input)).toBe(expected)
   })
 
   describe("error cases", () => {
@@ -49,7 +49,7 @@ describe("chinese2Arabic", function () {
       ${"三百、二十"} | ${"includes non-numeric characters"}
     `("include non-numeric characters [$input -> $expectedMessage]", ({input, expectedMessage}) => {
       try {
-        chinese2Arabic(input)
+        kanji2Arabic(input)
         fail("should not reach here")
       } catch (e) {
         expect(e.message).toBe(expectedMessage)
@@ -64,7 +64,7 @@ describe("chinese2Arabic", function () {
       ${"五千四百三十二一"} | ${"unable to parse 二一"}
     `("unparsable factor [$input -> $expectedMessage]", ({input, expectedMessage}) => {
       try {
-        chinese2Arabic(input)
+        kanji2Arabic(input)
         fail("should not reach here")
       } catch (e) {
         expect(e.message).toBe(expectedMessage)
@@ -80,7 +80,7 @@ describe("chinese2Arabic", function () {
       ${"五千三十四百"} | ${"unable to parse 三十四百"}
     `("invalid middle numbers [$input -> $expectedMessage]", ({input, expectedMessage}) => {
       try {
-        chinese2Arabic(input)
+        kanji2Arabic(input)
         fail("should not reach here")
       } catch (e) {
         expect(e.message).toBe(expectedMessage)

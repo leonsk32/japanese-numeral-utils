@@ -1,4 +1,4 @@
-export function chinese2Arabic(text: string) {
+export function kanji2Arabic(text: string): string {
   validate(text)
 
   if (isSmallNumberOnly(text)) {
