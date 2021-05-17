@@ -5,7 +5,12 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
+    "prepublish": "tsc",
     "test": "jest --testPathPattern=specs --runInBand"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leonsk32/japanese-numeral-utils"
   },
   "author": "leonsk32",
   "license": "MIT",
