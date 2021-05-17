@@ -20,4 +20,15 @@ describe("chinese2Arabic", function () {
   it("no large numbers", () => {
     expect(chinese2Arabic("一二三四五六七八九〇")).toBe("1234567890")
   })
+
+  it.each`
+    input | expected
+    ${"五千四百三十二"} | ${"5432"}
+    ${"千百十一"} | ${"1111"}
+    ${"五千"} | ${"5000"}
+    ${"五千三十"} | ${"5030"}
+    ${"五百一"} | ${"501"}
+  `("with large numbers [$input -> $expected]", ({input, expected}) => {
+    expect(chinese2Arabic(input)).toBe(expected)
+  })
 })

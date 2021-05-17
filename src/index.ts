@@ -1,10 +1,60 @@
 export function chinese2Arabic(text: string) {
-  let result = ""
-  text.split("").forEach(e => {
-    result = result + chinese2ArabicMap[e].toString()
-  })
+  const largeNumbers = Object.keys(largeNumbersMap)
 
-  return result
+
+  const largeNumbersRegex = new RegExp("[" + largeNumbers.join("") + "]")
+  const matchResult = text.match(largeNumbersRegex)
+
+  if (!matchResult) {
+    let result = ""
+    text.split("").forEach(e => {
+      result = result + chinese2ArabicMap[e].toString()
+    })
+
+    return result
+  }
+
+  return f(largeNumbers, text).toString()
+}
+
+function f(largeNumbers: string[], text: string): number {
+  if (text === "") {
+    return 0
+  }
+
+  const largeNumbersRegex = new RegExp("[" + largeNumbers.join("") + "]")
+  const matchResult = text.match(largeNumbersRegex)
+
+  if (!matchResult) {
+    if (text.length !== 1) {
+      throw TypeError()
+    }
+
+    const value = chinese2ArabicMap[text]
+    if (value === undefined) {
+      throw TypeError()
+    }
+    return value
+  }
+
+  const matchedIndex = matchResult.index
+  const matchedLargeNumber = matchResult[0]
+
+  let factor
+  if (matchedIndex == 0) {
+    factor = 1
+  } else if (matchedIndex == 1) {
+    const chineseFactor = text.split(matchedLargeNumber)[0]
+    factor = chinese2ArabicMap[chineseFactor]
+  } else {
+    throw TypeError()
+  }
+
+  return factor * largeNumbersMap[matchedLargeNumber]
+    + f(
+      largeNumbers.filter(value => value !== matchedLargeNumber),
+      text.substring(matchedIndex + 1)
+    )
 }
 
 const chinese2ArabicMap: Record<string, number> = {
@@ -19,3 +69,10 @@ const chinese2ArabicMap: Record<string, number> = {
   "八": 8,
   "九": 9,
 }
+
+const largeNumbersMap: Record<string, number> = {
+  "十": 10,
+  "百": 100,
+  "千": 1000,
+}
+
