@@ -1,17 +1,25 @@
 export function chinese2Arabic(text: string) {
+  validate(text)
+
+  if (isSmallNumberOnly(text)) {
+    return getArabicNumbersFromSmallNumberOnlyText(text)
+  }
+
+  return parseLargeNumbers(text, largeNumbersList).replace(/^0+/, "")
+}
+
+function validate(text: string) {
   if (!text.match(
     new RegExp(`^[${allNumbersList.join("")}]+$`)
   )) {
     throw TypeError("includes non-numeric characters")
   }
+}
 
-  if (!text.match(
-    new RegExp(`[${largeNumbersList.concat(middleNumbersList).join("")}]`)
-  )) {
-    return getArabicNumbersFromSmallNumberOnlyText(text)
-  }
-
-  return parseLargeNumbers(text, largeNumbersList).replace(/^0+/, "")
+function isSmallNumberOnly(text: string) {
+  return text.match(
+    new RegExp(`^[${smallNumbersList.join("")}]+$`)
+  )
 }
 
 function getArabicNumbersFromSmallNumberOnlyText(text: string) {
