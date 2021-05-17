@@ -9,16 +9,15 @@ export function chinese2Arabic(text: string) {
 }
 
 function getArabicNumbersFromSmallNumberOnlyText(text: string) {
-  return text.split("").map(e => chinese2ArabicMap[e]).join("")
+  return text.split("").map(e => smallNumbersMap[e]).join("")
 }
 
 function parseLargeNumbers(text: string, largeNumberList: string[]): string {
   if (largeNumberList.length === 0) {
-    return parseMiddleNumbers(middleNumbersList, text).toString().padStart(4, "0")
+    return parseMiddleNumbers(text, middleNumbersList).toString().padStart(4, "0")
   }
 
-  const targetLargeNumber = largeNumberList[0]
-  const matchResult = text.match(new RegExp(targetLargeNumber))
+  const matchResult = text.match(new RegExp(largeNumberList[0]))
 
   if (!matchResult) {
     return "0000" + parseLargeNumbers(
@@ -29,7 +28,7 @@ function parseLargeNumbers(text: string, largeNumberList: string[]): string {
 
   const matchedIndex = matchResult.index
 
-  return parseMiddleNumbers(middleNumbersList, text.substring(0, matchedIndex))
+  return parseMiddleNumbers(text.substring(0, matchedIndex), middleNumbersList)
       .toString().padStart(4, "0")
     + parseLargeNumbers(
       text.substring(matchedIndex! + 1),
@@ -37,63 +36,57 @@ function parseLargeNumbers(text: string, largeNumberList: string[]): string {
     )
 }
 
-function parseMiddleNumbers(middleNumbers: string[], text: string): number {
-  if (text === "") {
-    return 0
+function parseMiddleNumbers(text: string, middleNumberList: string[]): string {
+  if (middleNumberList.length === 0) {
+    if (text.length === 0) {
+      return "0"
+    } else if (text.length === 1) {
+      return smallNumbersMap[text]
+    } else {
+      throw TypeError(`unable to parse ${text}`)
+    }
   }
 
-  const middleNumbersRegex = new RegExp("[" + middleNumbers.join("") + "]")
-  const matchResult = text.match(middleNumbersRegex)
+  const matchResult = text.match(new RegExp(middleNumberList[0]))
 
   if (!matchResult) {
-    if (text.length !== 1) {
-      throw TypeError(`unable to parse ${text}`)
-    }
-
-    const value = chinese2ArabicMap[text]
-    if (value === undefined) {
-      throw TypeError(`unable to parse ${text}`)
-    }
-
-    return value
+    return "0" + parseMiddleNumbers(
+      text,
+      middleNumberList.slice(1)
+    )
   }
 
   const matchedIndex = matchResult.index
-  const matchedMiddleNumber = matchResult[0]
 
   if (matchedIndex! > 1) {
     throw TypeError(`unable to parse ${text}`)
   }
 
-  const factor = matchedIndex === 0 ? 1 : chinese2ArabicMap[(text.charAt(0))]
-
-  return factor * middleNumbersMap[matchedMiddleNumber]
+  return (matchedIndex === 0 ? 1 : smallNumbersMap[(text.charAt(0))])
     + parseMiddleNumbers(
-      middleNumbers.slice(middleNumbers.findIndex(n => n === matchedMiddleNumber) + 1),
-      text.substring(matchedIndex! + 1)
+      text.substring(matchedIndex! + 1),
+      middleNumberList.slice(1),
     )
 }
 
-const chinese2ArabicMap: Record<string, number> = {
-  "〇": 0,
-  "一": 1,
-  "二": 2,
-  "三": 3,
-  "四": 4,
-  "五": 5,
-  "六": 6,
-  "七": 7,
-  "八": 8,
-  "九": 9,
+const smallNumbersMap: Record<string, string> = {
+  "〇": "0",
+  "一": "1",
+  "二": "2",
+  "三": "3",
+  "四": "4",
+  "五": "5",
+  "六": "6",
+  "七": "7",
+  "八": "8",
+  "九": "9",
 }
 
-const middleNumbersMap: Record<string, number> = {
-  "千": 1000,
-  "百": 100,
-  "十": 10,
-}
-
-const middleNumbersList = Object.keys(middleNumbersMap)
+const middleNumbersList: string[] = [
+  "千",
+  "百",
+  "十",
+]
 
 const largeNumbersList: string[] = [
   "京",

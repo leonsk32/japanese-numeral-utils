@@ -62,8 +62,8 @@ describe("chinese2Arabic", function () {
       ${"五千五千"} | ${"unable to parse 五千"}
       ${"五千四百四百"} | ${"unable to parse 四百"}
       ${"五千四百三十三十"} | ${"unable to parse 三十"}
-      ${"四百五千"} | ${"unable to parse 五千"}
-      ${"五千三十四百"} | ${"unable to parse 四百"}
+      ${"四百五千"} | ${"unable to parse 四百五千"}
+      ${"五千三十四百"} | ${"unable to parse 三十四百"}
     `("invalid middle numbers [$input -> $expectedMessage]", ({input, expectedMessage}) => {
       try {
         chinese2Arabic(input)
