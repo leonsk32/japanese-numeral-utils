@@ -36,6 +36,7 @@ describe("chinese2Arabic", function () {
     input | expected
     ${"九千八百七十六兆五千四百三十二億九千八百七十六万五千四百三十二"} | ${"9876543298765432"}
     ${"九千八百七十六兆五千四百三十二"} | ${"9876000000005432"}
+    ${"九千京一"} | ${"90000000000000000001"}
   `("with large numbers [$input -> $expected]", ({input, expected}) => {
     expect(chinese2Arabic(input)).toBe(expected)
   })

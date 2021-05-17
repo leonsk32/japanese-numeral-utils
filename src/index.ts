@@ -1,43 +1,39 @@
 export function chinese2Arabic(text: string) {
-  const middleNumbers = Object.keys(middleNumbersMap)
-  const largeNumbers = Object.keys(largeNumbersMap)
-  const matchResult = text.match(
-    new RegExp(`[${largeNumbers.join("")}${middleNumbers.join("")}]`)
-  )
-
-  if (!matchResult) {
+  if (!text.match(
+    new RegExp(`[${largeNumbersList.concat(middleNumbersList).join("")}]`)
+  )) {
     return getArabicNumbersFromSmallNumberOnlyText(text)
   }
 
-  return parseLargeNumbers(largeNumbers, text).toString()
+  return parseLargeNumbers(text, largeNumbersList).replace(/^0+/, "")
 }
 
 function getArabicNumbersFromSmallNumberOnlyText(text: string) {
   return text.split("").map(e => chinese2ArabicMap[e]).join("")
 }
 
-function parseLargeNumbers(largeNumbers: string[], text: string): number {
-  if (text === "") {
-    return 0
+function parseLargeNumbers(text: string, largeNumberList: string[]): string {
+  if (largeNumberList.length === 0) {
+    return parseMiddleNumbers(middleNumbersList, text).toString().padStart(4, "0")
   }
 
-  const largeNumbersRegex = new RegExp("[" + largeNumbers.join("") + "]")
-  const matchResult = text.match(largeNumbersRegex)
-  const middleNumbers = Object.keys(middleNumbersMap)
+  const targetLargeNumber = largeNumberList[0]
+  const matchResult = text.match(new RegExp(targetLargeNumber))
 
   if (!matchResult) {
-    return parseMiddleNumbers(middleNumbers, text)
+    return "0000" + parseLargeNumbers(
+      text,
+      largeNumberList.slice(1)
+    )
   }
 
   const matchedIndex = matchResult.index
-  const matchedLargeNumber = matchResult[0]
 
-  const factor = parseMiddleNumbers(middleNumbers, text.substring(0, matchedIndex))
-
-  return factor * largeNumbersMap[matchedLargeNumber]
+  return parseMiddleNumbers(middleNumbersList, text.substring(0, matchedIndex))
+      .toString().padStart(4, "0")
     + parseLargeNumbers(
-      largeNumbers.slice(largeNumbers.findIndex(n => n === matchedLargeNumber) + 1),
-      text.substring(matchedIndex! + 1)
+      text.substring(matchedIndex! + 1),
+      largeNumberList.slice(1),
     )
 }
 
@@ -97,10 +93,12 @@ const middleNumbersMap: Record<string, number> = {
   "十": 10,
 }
 
-const largeNumbersMap: Record<string, number> = {
-  "京": Math.pow(10, 16),
-  "兆": Math.pow(10, 12),
-  "億": Math.pow(10, 8),
-  "万": Math.pow(10, 4),
-}
+const middleNumbersList = Object.keys(middleNumbersMap)
+
+const largeNumbersList: string[] = [
+  "京",
+  "兆",
+  "億",
+  "万",
+]
 
