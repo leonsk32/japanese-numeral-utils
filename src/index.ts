@@ -1,20 +1,18 @@
 export function chinese2Arabic(text: string) {
   const largeNumbers = Object.keys(largeNumbersMap)
-
-
-  const largeNumbersRegex = new RegExp("[" + largeNumbers.join("") + "]")
-  const matchResult = text.match(largeNumbersRegex)
+  const matchResult = text.match(
+    new RegExp("[" + largeNumbers.join("") + "]")
+  )
 
   if (!matchResult) {
-    let result = ""
-    text.split("").forEach(e => {
-      result = result + chinese2ArabicMap[e].toString()
-    })
-
-    return result
+    return getArabicNumbersFromSmallNumberOnlyText(text)
   }
 
   return f(largeNumbers, text).toString()
+}
+
+function getArabicNumbersFromSmallNumberOnlyText(text: string) {
+  return text.split("").map(e => chinese2ArabicMap[e]).join("")
 }
 
 function f(largeNumbers: string[], text: string): number {
