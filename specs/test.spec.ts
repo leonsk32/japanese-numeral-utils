@@ -17,7 +17,7 @@ describe("chinese2Arabic", function () {
     expect(chinese2Arabic(input)).toBe(expected)
   })
 
-  it("no large numbers", () => {
+  it("no middle numbers", () => {
     expect(chinese2Arabic("一二三四五六七八九〇")).toBe("1234567890")
   })
 
@@ -28,22 +28,40 @@ describe("chinese2Arabic", function () {
     ${"五千"} | ${"5000"}
     ${"五千三十"} | ${"5030"}
     ${"五百一"} | ${"501"}
-  `("with large numbers [$input -> $expected]", ({input, expected}) => {
+  `("with middle numbers [$input -> $expected]", ({input, expected}) => {
     expect(chinese2Arabic(input)).toBe(expected)
   })
 
-  it.each`
-    input | expectedMessage
-    ${"四五千"} | ${"unable to parse 四五千"}
-    ${"五千四三百"} | ${"unable to parse 四三百"}
-    ${"五千四百三二十"} | ${"unable to parse 三二十"}
-    ${"五千四百三十二一"} | ${"unable to parse 二一"}
-  `("unparsable [$input]", ({input, expectedMessage}) => {
-    try {
-      chinese2Arabic(input)
-      fail("should not reach here")
-    } catch (e) {
-      expect(e.message).toBe(expectedMessage)
-    }
+  describe("error cases", () => {
+    it.each`
+      input | expectedMessage
+      ${"四五千"} | ${"unable to parse 四五千"}
+      ${"五千四三百"} | ${"unable to parse 四三百"}
+      ${"五千四百三二十"} | ${"unable to parse 三二十"}
+      ${"五千四百三十二一"} | ${"unable to parse 二一"}
+    `("unparsable factor [$input -> $expectedMessage]", ({input, expectedMessage}) => {
+      try {
+        chinese2Arabic(input)
+        fail("should not reach here")
+      } catch (e) {
+        expect(e.message).toBe(expectedMessage)
+      }
+    })
+
+    it.each`
+      input | expectedMessage
+      ${"五千五千"} | ${"unable to parse 五千"}
+      ${"五千四百四百"} | ${"unable to parse 四百"}
+      ${"五千四百三十三十"} | ${"unable to parse 三十"}
+      ${"四百五千"} | ${"unable to parse 五千"}
+      ${"五千三十四百"} | ${"unable to parse 四百"}
+    `("invalid middle numbers [$input -> $expectedMessage]", ({input, expectedMessage}) => {
+      try {
+        chinese2Arabic(input)
+        fail("should not reach here")
+      } catch (e) {
+        expect(e.message).toBe(expectedMessage)
+      }
+    })
   })
 })

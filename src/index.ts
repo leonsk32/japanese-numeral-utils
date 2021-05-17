@@ -37,7 +37,7 @@ function parseMiddleNumbers(middleNumbers: string[], text: string): number {
   }
 
   const matchedIndex = matchResult.index
-  const matchedLargeNumber = matchResult[0]
+  const matchedMiddleNumber = matchResult[0]
 
   if (matchedIndex === undefined || matchedIndex > 1) {
     throw TypeError(`unable to parse ${text}`)
@@ -45,9 +45,9 @@ function parseMiddleNumbers(middleNumbers: string[], text: string): number {
 
   const factor = matchedIndex === 0 ? 1 : chinese2ArabicMap[(text.charAt(0))]
 
-  return factor * middleNumbersMap[matchedLargeNumber]
+  return factor * middleNumbersMap[matchedMiddleNumber]
     + parseMiddleNumbers(
-      middleNumbers.filter(value => value !== matchedLargeNumber),
+      middleNumbers.slice(middleNumbers.findIndex(n => n === matchedMiddleNumber) + 1),
       text.substring(matchedIndex + 1)
     )
 }
@@ -66,8 +66,8 @@ const chinese2ArabicMap: Record<string, number> = {
 }
 
 const middleNumbersMap: Record<string, number> = {
-  "十": 10,
-  "百": 100,
   "千": 1000,
+  "百": 100,
+  "十": 10,
 }
 
