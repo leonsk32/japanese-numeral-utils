@@ -2,7 +2,7 @@ export function chinese2Arabic(text: string) {
   validate(text)
 
   if (isSmallNumberOnly(text)) {
-    return getArabicNumbersFromSmallNumberOnlyText(text)
+    return parseSmallNumbersOnly(text)
   }
 
   return parseLargeNumbers(text, largeNumbersList).replace(/^0+/, "")
@@ -22,13 +22,13 @@ function isSmallNumberOnly(text: string) {
   )
 }
 
-function getArabicNumbersFromSmallNumberOnlyText(text: string) {
+function parseSmallNumbersOnly(text: string) {
   return text.split("").map(e => smallNumbersMap[e]).join("")
 }
 
 function parseLargeNumbers(text: string, largeNumberList: string[]): string {
   if (largeNumberList.length === 0) {
-    return parseMiddleNumbers(text, middleNumbersList).toString().padStart(4, "0")
+    return parseMiddleNumbers(text, middleNumbersList)
   }
 
   const matchResult = text.match(new RegExp(largeNumberList[0]))
@@ -43,7 +43,6 @@ function parseLargeNumbers(text: string, largeNumberList: string[]): string {
   const matchedIndex = matchResult.index
 
   return parseMiddleNumbers(text.substring(0, matchedIndex), middleNumbersList)
-      .toString().padStart(4, "0")
     + parseLargeNumbers(
       text.substring(matchedIndex! + 1),
       largeNumberList.slice(1),
@@ -56,9 +55,9 @@ function parseMiddleNumbers(text: string, middleNumberList: string[]): string {
       return "0"
     } else if (text.length === 1) {
       return smallNumbersMap[text]
-    } else {
-      throw TypeError(`unable to parse ${text}`)
     }
+
+    throw TypeError(`unable to parse ${text}`)
   }
 
   const matchResult = text.match(new RegExp(middleNumberList[0]))
