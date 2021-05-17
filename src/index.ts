@@ -1,5 +1,11 @@
 export function chinese2Arabic(text: string) {
   if (!text.match(
+    new RegExp(`^[${allNumbersList.join("")}]+$`)
+  )) {
+    throw TypeError("includes non-numeric characters")
+  }
+
+  if (!text.match(
     new RegExp(`[${largeNumbersList.concat(middleNumbersList).join("")}]`)
   )) {
     return getArabicNumbersFromSmallNumberOnlyText(text)
@@ -82,6 +88,8 @@ const smallNumbersMap: Record<string, string> = {
   "九": "9",
 }
 
+const smallNumbersList: string[] = Object.keys(smallNumbersMap)
+
 const middleNumbersList: string[] = [
   "千",
   "百",
@@ -89,9 +97,18 @@ const middleNumbersList: string[] = [
 ]
 
 const largeNumbersList: string[] = [
+  "極",
+  "載",
+  "正",
+  "澗",
+  "溝",
+  "穣",
+  "𥝱",
+  "垓",
   "京",
   "兆",
   "億",
   "万",
 ]
 
+const allNumbersList: string[] = smallNumbersList.concat(middleNumbersList, largeNumbersList)

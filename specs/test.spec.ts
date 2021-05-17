@@ -37,11 +37,25 @@ describe("chinese2Arabic", function () {
     ${"九千八百七十六兆五千四百三十二億九千八百七十六万五千四百三十二"} | ${"9876543298765432"}
     ${"九千八百七十六兆五千四百三十二"} | ${"9876000000005432"}
     ${"九千京一"} | ${"90000000000000000001"}
+    ${"九千極"} | ${"9000000000000000000000000000000000000000000000000000"}
   `("with large numbers [$input -> $expected]", ({input, expected}) => {
     expect(chinese2Arabic(input)).toBe(expected)
   })
 
   describe("error cases", () => {
+    it.each`
+      input | expectedMessage
+      ${"あ"} | ${"includes non-numeric characters"}
+      ${"三百、二十"} | ${"includes non-numeric characters"}
+    `("include non-numeric characters [$input -> $expectedMessage]", ({input, expectedMessage}) => {
+      try {
+        chinese2Arabic(input)
+        fail("should not reach here")
+      } catch (e) {
+        expect(e.message).toBe(expectedMessage)
+      }
+    })
+
     it.each`
       input | expectedMessage
       ${"四五千"} | ${"unable to parse 四五千"}
