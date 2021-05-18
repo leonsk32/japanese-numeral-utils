@@ -27,4 +27,13 @@ console.log(isKanjiNumeric("〇一二三四五六七八九"));
 
 console.log(isKanjiNumeric("123"));
 // false
+
+console.log(fullWidthAlphabet2HalfWidthAlphabet("ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ"));
+// "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+
+console.log(isFullWidthAlphabetical("ＡＢＣａｂｃ"));
+// true
+
+console.log(isFullWidthAlphabetical("abcABC"));
+// false
 ```
