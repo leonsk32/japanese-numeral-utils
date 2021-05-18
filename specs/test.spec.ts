@@ -1,6 +1,6 @@
 import { kanji2Arabic } from "../src"
 
-describe("chinese2Arabic", function () {
+describe("kanji2Arabic", function () {
   it.each`
     input | expected
     ${"〇"} | ${"0"}

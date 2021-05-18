@@ -95,15 +95,15 @@ const smallNumbersMap: Record<string, string> = {
   "九": "9",
 }
 
-const smallNumbersList: string[] = Object.keys(smallNumbersMap)
+export const smallNumbersList: string[] = Object.keys(smallNumbersMap)
 
-const middleNumbersList: string[] = [
+export const middleNumbersList: string[] = [
   "千",
   "百",
   "十",
 ]
 
-const largeNumbersList: string[] = [
+export const largeNumbersList: string[] = [
   "極",
   "載",
   "正",
