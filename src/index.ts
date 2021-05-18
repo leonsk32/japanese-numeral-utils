@@ -1,5 +1,7 @@
 export function kanji2Arabic(text: string): string {
-  validate(text)
+  if (!isKanjiNumeric(text)) {
+    throw TypeError("includes non-numeric characters")
+  }
 
   if (isSmallNumberOnly(text)) {
     return parseSmallNumbersOnly(text)
@@ -14,10 +16,25 @@ export function isKanjiNumeric(text: string): boolean {
   )
 }
 
-function validate(text: string) {
-  if (!isKanjiNumeric(text)) {
-    throw TypeError("includes non-numeric characters")
+export function fullWidthAlphabet2HalfWidthAlphabet(text: string): string {
+  if (!isFullWidthAlphabetical(text)) {
+    throw TypeError("includes non-full-width-alphabetical characters")
   }
+
+  let result = ""
+  for (let i = 0; i < text.length; i++) {
+    result += String.fromCharCode(text.charCodeAt(i) - 65248)
+  }
+  return result
+}
+
+export function isFullWidthAlphabetical(text: string): boolean {
+  for (let i = 0; i < text.length; i++) {
+    if (!(text.charCodeAt(i) > 65312 && text.charCodeAt(i) < 65339)) {
+      return false
+    }
+  }
+  return true
 }
 
 function isSmallNumberOnly(text: string) {

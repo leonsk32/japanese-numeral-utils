@@ -1,4 +1,4 @@
-import { isKanjiNumeric, kanji2Arabic } from "../src"
+import { fullWidthAlphabet2HalfWidthAlphabet, isFullWidthAlphabetical, isKanjiNumeric, kanji2Arabic } from "../src"
 
 describe("kanji2Arabic", function () {
   it.each`
@@ -98,5 +98,32 @@ describe("isKanjiNumeric", function () {
     ${"123"} | ${false}
   `("input: $input, expected: $expected", ({input, expected}) => {
     expect(isKanjiNumeric(input)).toBe(expected)
+  })
+})
+
+describe("fullWidthAlphabet2HalfWidthAlphabet", function () {
+  it("happy path", () => {
+    expect(fullWidthAlphabet2HalfWidthAlphabet("ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ")).toBe("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+  })
+
+  it("include non-full-width-alphabetical characters", () => {
+    try {
+      fullWidthAlphabet2HalfWidthAlphabet("a")
+      fail("should not reach here")
+    } catch (e) {
+      expect(e.message).toBe("includes non-full-width-alphabetical characters")
+    }
+  })
+})
+
+describe("isFullWidthAlphabetical", function () {
+  it.each`
+    input | expected
+    ${"ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ"} | ${true}
+    ${"a"} | ${false}
+    ${"＠"} | ${false}
+    ${"［"} | ${false}
+  `("input: $input, expected: $expected", ({input, expected}) => {
+    expect(isFullWidthAlphabetical(input)).toBe(expected)
   })
 })
