@@ -1,4 +1,4 @@
-import { kanji2Arabic } from "../src"
+import { isKanjiNumeric, kanji2Arabic } from "../src"
 
 describe("kanji2Arabic", function () {
   it.each`
@@ -86,5 +86,17 @@ describe("kanji2Arabic", function () {
         expect(e.message).toBe(expectedMessage)
       }
     })
+  })
+})
+
+describe("isKanjiNumeric", function () {
+  it.each`
+    input | expected
+    ${"〇一二三四五六七八九"} | ${true}
+    ${"極載正澗溝穣𥝱垓京兆億万千百十"} | ${true}
+    ${"あ"} | ${false}
+    ${"123"} | ${false}
+  `("input: $input, expected: $expected", ({input, expected}) => {
+    expect(isKanjiNumeric(input)).toBe(expected)
   })
 })

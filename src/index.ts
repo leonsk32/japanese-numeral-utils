@@ -8,10 +8,14 @@ export function kanji2Arabic(text: string): string {
   return parseLargeNumbers(text, largeNumbersList).replace(/^0+/, "")
 }
 
-function validate(text: string) {
-  if (!text.match(
+export function isKanjiNumeric(text: string): boolean {
+  return !!text.match(
     new RegExp(`^[${allNumbersList.join("")}]+$`)
-  )) {
+  )
+}
+
+function validate(text: string) {
+  if (!isKanjiNumeric(text)) {
     throw TypeError("includes non-numeric characters")
   }
 }

@@ -21,4 +21,10 @@ console.log(kanji2Arabic("九千八百七十六兆五千四百三十二億九千
 
 console.log(kanji2Arabic("一二三四五六七八九〇"));
 // "1234567890"
+
+console.log(isKanjiNumeric("〇一二三四五六七八九"));
+// true
+
+console.log(isKanjiNumeric("123"));
+// false
 ```
