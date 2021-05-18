@@ -56,7 +56,7 @@ function isSmallNumberOnly(text: string) {
 }
 
 function parseSmallNumbersOnly(text: string) {
-  return text.split("").map(e => smallNumbersMap[e]).join("")
+  return text.split("").map(e => convertSmallNumber(e)).join("")
 }
 
 function parseLargeNumbers(text: string, largeNumberList: string[]): string {
@@ -87,7 +87,7 @@ function parseMiddleNumbers(text: string, middleNumberList: string[]): string {
     if (text.length === 0) {
       return "0"
     } else if (text.length === 1) {
-      return smallNumbersMap[text]
+      return convertSmallNumber(text)
     }
 
     throw TypeError(`unable to parse ${text}`)
@@ -108,11 +108,19 @@ function parseMiddleNumbers(text: string, middleNumberList: string[]): string {
     throw TypeError(`unable to parse ${text}`)
   }
 
-  return (matchedIndex === 0 ? 1 : smallNumbersMap[(text.charAt(0))])
+  return (matchedIndex === 0 ? 1 : convertSmallNumber(text.charAt(0)))
     + parseMiddleNumbers(
       text.substring(matchedIndex! + 1),
       middleNumberList.slice(1),
     )
+}
+
+function convertSmallNumber(text: string): string {
+  const result = smallNumbersMap[text]
+  if (!result) {
+    throw TypeError(`unable to convert ${text}`)
+  }
+  return result
 }
 
 const smallNumbersMap: Record<string, string> = {

@@ -86,6 +86,21 @@ describe("kanji2Arabic", function () {
         expect(e.message).toBe(expectedMessage)
       }
     })
+
+    it.each`
+      input | expectedMessage
+      ${"五万五万"} | ${"unable to parse 五万"}
+      ${"万万"} | ${"unable to convert 万"}
+      ${"兆万億"} | ${"unable to convert 万"}
+      ${"五千万兆"} | ${"unable to convert 万"}
+    `("invalid large numbers [$input -> $expectedMessage]", ({input, expectedMessage}) => {
+      try {
+        kanji2Arabic(input)
+        fail("should not reach here")
+      } catch (e) {
+        expect(e.message).toBe(expectedMessage)
+      }
+    })
   })
 })
 
