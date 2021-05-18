@@ -30,11 +30,23 @@ export function fullWidthAlphabet2HalfWidthAlphabet(text: string): string {
 
 export function isFullWidthAlphabetical(text: string): boolean {
   for (let i = 0; i < text.length; i++) {
-    if (!(text.charCodeAt(i) > 65312 && text.charCodeAt(i) < 65339)) {
+    const charCode = text.charCodeAt(i)
+    if (
+      !isUpperCaseFullWidthAlphabetical(charCode) &&
+      !isLowerCaseFullWidthAlphabetical(charCode)
+    ) {
       return false
     }
   }
   return true
+}
+
+function isUpperCaseFullWidthAlphabetical(charCode: number) {
+  return charCode > 65312 && charCode < 65339
+}
+
+function isLowerCaseFullWidthAlphabetical(charCode: number) {
+  return charCode > 65344 && charCode < 65371
 }
 
 function isSmallNumberOnly(text: string) {

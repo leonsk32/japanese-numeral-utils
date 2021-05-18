@@ -103,12 +103,16 @@ describe("isKanjiNumeric", function () {
 
 describe("fullWidthAlphabet2HalfWidthAlphabet", function () {
   it("happy path", () => {
-    expect(fullWidthAlphabet2HalfWidthAlphabet("ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ")).toBe("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    expect(fullWidthAlphabet2HalfWidthAlphabet(
+      "ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ"
+    )).toBe(
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+    )
   })
 
   it("include non-full-width-alphabetical characters", () => {
     try {
-      fullWidthAlphabet2HalfWidthAlphabet("a")
+      fullWidthAlphabet2HalfWidthAlphabet("aA")
       fail("should not reach here")
     } catch (e) {
       expect(e.message).toBe("includes non-full-width-alphabetical characters")
@@ -120,9 +124,15 @@ describe("isFullWidthAlphabetical", function () {
   it.each`
     input | expected
     ${"ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ"} | ${true}
+    ${"ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ"} | ${true}
     ${"a"} | ${false}
+    ${"z"} | ${false}
+    ${"A"} | ${false}
+    ${"Z"} | ${false}
     ${"＠"} | ${false}
     ${"［"} | ${false}
+    ${"｀"} | ${false}
+    ${"｛"} | ${false}
   `("input: $input, expected: $expected", ({input, expected}) => {
     expect(isFullWidthAlphabetical(input)).toBe(expected)
   })
