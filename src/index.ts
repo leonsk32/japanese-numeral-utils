@@ -1,3 +1,5 @@
+import {halfWidthKana2FullWidthKanaMap} from './halfWidthKana2FullWidthKana'
+
 export function kanji2Arabic(text: string): string {
   if (!isKanjiNumeric(text)) {
     throw TypeError("includes non-numeric characters")
@@ -28,6 +30,21 @@ export function fullWidthAlphabet2HalfWidthAlphabet(text: string): string {
   return result
 }
 
+export function halfWidthText2FullWidthText(text: string): string {
+  let result = ''
+  for (let i = 0; i < text.length; i++) {
+    const character = text[i]
+    if (isHalfWidthKanaCharacter(character.charCodeAt(0))) {
+      result += halfWidthKana2FullWidthKanaMap[character];
+    } else if (isHalfWidthNotKanaCharacter(character.charCodeAt(0))) {
+      result += String.fromCharCode(character.charCodeAt(0) + 65248)
+    } else {
+      result += character
+    }
+  }
+  return result
+}
+
 export function isFullWidthAlphabetical(text: string): boolean {
   for (let i = 0; i < text.length; i++) {
     const charCode = text.charCodeAt(i)
@@ -39,6 +56,10 @@ export function isFullWidthAlphabetical(text: string): boolean {
     }
   }
   return true
+}
+
+export function isHalfWidthNotKanaCharacter(charCode: number) {
+  return 32 < charCode && charCode < 127
 }
 
 function isUpperCaseFullWidthAlphabetical(charCode: number) {
@@ -53,6 +74,10 @@ function isSmallNumberOnly(text: string) {
   return text.match(
     new RegExp(`^[${smallNumbersList.join("")}]+$`)
   )
+}
+
+function isHalfWidthKanaCharacter(charCode: number): boolean {
+  return 65381 < charCode && charCode < 65440;
 }
 
 function parseSmallNumbersOnly(text: string) {
