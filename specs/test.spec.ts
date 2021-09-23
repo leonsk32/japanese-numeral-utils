@@ -158,11 +158,18 @@ describe("isHalfWidthNotKanaCharacter", () => {
 });
 
 describe("halfWidth2FullWidth", () => {
-  it("halfWidth2FullWidth", () => {
+  it("happy path", () => {
     expect(halfWidthText2FullWidthText(
-      "ｱｶｻABCz123"
+      "ｱｶｻABCz123abcあ"
     )).toBe(
-      "アカサＡＢＣｚ１２３"
+      "アカサＡＢＣｚ１２３ａｂｃ"
+    )
+  });
+  it("全角はそのまま出力", () => {
+    expect(halfWidthText2FullWidthText(
+      "あいう"
+    )).toBe(
+      "あいう"
     )
   });
 });
