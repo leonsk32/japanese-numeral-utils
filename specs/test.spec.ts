@@ -165,11 +165,12 @@ describe("halfWidth2FullWidth", () => {
       "アカサＡＢＣｚ１２３ａｂｃ"
     )
   });
-  it("全角はそのまま出力", () => {
+
+  it("Full-width characters will be output as it is", () => {
     expect(halfWidthText2FullWidthText(
-      "あいう"
+      "あABCい"
     )).toBe(
-      "あいう"
+      "あＡＢＣい"
     )
   });
 });

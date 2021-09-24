@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "prepublish": "tsc",
-    "test": "jest --testPathPattern=specs --runInBand"
+    "test": "jest --testPathPattern=specs"
   },
   "repository": {
     "type": "git",
