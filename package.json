@@ -1,6 +1,6 @@
 {
   "name": "@leonsk32/japanese-numeral-utils",
-  "version": "0.3.3",
+  "version": "1.0.0",
   "description": "Utilities for handling Japanese numerals.",
   "main": "dist/index.js",
   "scripts": {
