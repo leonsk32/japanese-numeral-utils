@@ -160,7 +160,7 @@ describe("isHalfWidthNotKanaCharacter", () => {
 describe("halfWidth2FullWidth", () => {
   it("happy path", () => {
     expect(halfWidthText2FullWidthText(
-      "ｱｶｻABCz123abcあ"
+      "ｱｶｻABCz123abc"
     )).toBe(
       "アカサＡＢＣｚ１２３ａｂｃ"
     )
