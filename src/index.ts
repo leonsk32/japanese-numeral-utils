@@ -1,4 +1,4 @@
-import {halfWidthKana2FullWidthKanaMap} from './halfWidthKana2FullWidthKana'
+import { halfWidthKana2FullWidthKanaMap } from './halfWidthKana2FullWidthKana'
 
 export function kanji2Arabic(text: string): string {
   if (!isKanjiNumeric(text)) {
@@ -19,13 +19,17 @@ export function isKanjiNumeric(text: string): boolean {
 }
 
 export function fullWidthAlphabet2HalfWidthAlphabet(text: string): string {
-  if (!isFullWidthAlphabetical(text)) {
-    throw TypeError("includes non-full-width-alphabetical characters")
-  }
-
   let result = ""
   for (let i = 0; i < text.length; i++) {
-    result += String.fromCharCode(text.charCodeAt(i) - 65248)
+    const charCode = text.charCodeAt(i)
+    if (
+      !isUpperCaseFullWidthAlphabetical(charCode) &&
+      !isLowerCaseFullWidthAlphabetical(charCode)
+    ) {
+      result += text[i]
+    } else {
+      result += String.fromCharCode(charCode - 65248)
+    }
   }
   return result
 }

@@ -132,13 +132,12 @@ describe("fullWidthAlphabet2HalfWidthAlphabet", function () {
     )
   })
 
-  it("include non-full-width-alphabetical characters", () => {
-    try {
-      fullWidthAlphabet2HalfWidthAlphabet("aA")
-      fail("should not reach here")
-    } catch (e) {
-      expect(e.message).toBe("includes non-full-width-alphabetical characters")
-    }
+  it("non-full-width alphabet will be output as it is", () => {
+    expect(fullWidthAlphabet2HalfWidthAlphabet(
+      "ＡBCＤ"
+    )).toBe(
+      "ABCD"
+    )
   })
 })
 
@@ -166,7 +165,7 @@ describe("halfWidth2FullWidth", () => {
     )
   });
 
-  it("Full-width characters will be output as it is", () => {
+  it("full-width characters will be output as it is", () => {
     expect(halfWidthText2FullWidthText(
       "あABCい"
     )).toBe(

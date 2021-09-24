@@ -28,6 +28,9 @@ console.log(kanji2Arabic("九千八百七十六兆五千四百三十二億九千
 console.log(kanji2Arabic("一二三四五六七八九〇"));
 // "1234567890"
 
+console.log(kanji2Arabic("四百五千")); // invalid kanji number
+// throw TypeError
+
 console.log(isKanjiNumeric("〇一二三四五六七八九"));
 // true
 
@@ -37,6 +40,9 @@ console.log(isKanjiNumeric("123"));
 console.log(fullWidthAlphabet2HalfWidthAlphabet("ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ"));
 // "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
+console.log(fullWidthAlphabet2HalfWidthAlphabet("ＡBCＤ"));
+// "ABCD"
+
 console.log(isFullWidthAlphabetical("ＡＢＣａｂｃ"));
 // true
 
@@ -44,5 +50,8 @@ console.log(isFullWidthAlphabetical("abcABC"));
 // false
 
 console.log(halfWidthText2FullWidthText("ｱｶｻABCz123abc"))
-// アカサＡＢＣｚ１２３ａｂｃ
+// "アカサＡＢＣｚ１２３ａｂｃ"
+
+console.log(halfWidthText2FullWidthText("あABCい"))
+// "あＡＢＣい"
 ```
