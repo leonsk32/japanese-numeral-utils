@@ -1,4 +1,11 @@
-import { fullWidthAlphabet2HalfWidthAlphabet, isFullWidthAlphabetical, isKanjiNumeric, kanji2Arabic } from "../src"
+import {
+  fullWidthAlphabet2HalfWidthAlphabet,
+  halfWidthText2FullWidthText,
+  isFullWidthAlphabetical,
+  isKanjiNumeric,
+  kanji2Arabic,
+  isHalfWidthNotKanaCharacter
+} from "../src"
 
 describe("kanji2Arabic", function () {
   it.each`
@@ -134,6 +141,38 @@ describe("fullWidthAlphabet2HalfWidthAlphabet", function () {
     }
   })
 })
+
+describe("isHalfWidthNotKanaCharacter", () => {
+  it.each([
+    ["a", true],
+    ["z", true],
+    ["ｱ", false],
+    ["ﾝ", false],
+    ["A", true],
+    ["Z", true],
+    ["あ", false],
+  ]
+  )("isHalfWidthCharacter", (input, expected) => {
+    expect(isHalfWidthNotKanaCharacter(input.charCodeAt(0))).toBe(expected)
+  })
+});
+
+describe("halfWidth2FullWidth", () => {
+  it("happy path", () => {
+    expect(halfWidthText2FullWidthText(
+      "ｱｶｻABCz123abc"
+    )).toBe(
+      "アカサＡＢＣｚ１２３ａｂｃ"
+    )
+  });
+  it("全角はそのまま出力", () => {
+    expect(halfWidthText2FullWidthText(
+      "あいう"
+    )).toBe(
+      "あいう"
+    )
+  });
+});
 
 describe("isFullWidthAlphabetical", function () {
   it.each`
